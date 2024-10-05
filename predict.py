@@ -1,6 +1,9 @@
 import pickle
 import numpy as np
 from flask import Flask, request, jsonify
+import os
+
+from flask_cors import CORS
 
 
 # Load the model and scaler
@@ -11,9 +14,12 @@ with open("scaler.pkl", "rb") as scaler_file:
     scaler = pickle.load(scaler_file)
 
 app = Flask(__name__)
+CORS(app)
 
-@app.route('/receiveData', methods=['POST'])    
+
+@app.route('/receiveData', methods=['POST'])
 def receive_data():
+
     data = request.json
     distance_from_sun = float(data['distance'])
     mass = float(data['mass'])
@@ -187,6 +193,7 @@ def predict_habitability(new_factors):
 
 # Main logic to predict habitability
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
     receive_data()
 
