@@ -59,18 +59,18 @@ def receive_data():
         vegetation_percentage = calculate_vegetation_percentage(water_body_percentage, oxygen_percentage, temp_factor, co2_percentage)
         cloud_percentage = calculate_cloud_percentage(atmospheric_thickness, water_body_percentage, co2_percentage)
         score = predict_habitability(user_factors)
-        print(f"\nResults:")
-        print(f"Water Body Percentage (calculated): {water_body_percentage:.2f}%")
-        print(f"Vegetation Percentage: {vegetation_percentage:.2f}%")
-        print(f"Temperature Suitability Factor: {temp_factor:.2f}")
-        print(f"Cloud Cover Percentage: {cloud_percentage:.2f}%")
-        if(score>100):
+
+        if(score>1):
             score=100
+        else:
+            score*=100
         
 
         print(f"Predicted Habitability Score: {score:.2f}")
         
-    return jsonify({'habitability_score': score})
+    return jsonify({'habitability_score': score,
+                    'sea_level':water_body_percentage,
+                    'vegetation':vegetation_percentage,})
 
 
 # Function to get user input
