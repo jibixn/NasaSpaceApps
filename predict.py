@@ -54,7 +54,22 @@ def receive_data():
     }
     # Calculate habitability score based on the incoming parameters
     if(user_factors):
+        temp_factor = calculate_temperature_factor(Etemperature, co2_percentage)
+        water_body_percentage = calculate_water_body_percentage(distance_from_sun, Etemperature, atmospheric_thickness, magnetic_field)
+        vegetation_percentage = calculate_vegetation_percentage(water_body_percentage, oxygen_percentage, temp_factor, co2_percentage)
+        cloud_percentage = calculate_cloud_percentage(atmospheric_thickness, water_body_percentage, co2_percentage)
         score = predict_habitability(user_factors)
+        print(f"\nResults:")
+        print(f"Water Body Percentage (calculated): {water_body_percentage:.2f}%")
+        print(f"Vegetation Percentage: {vegetation_percentage:.2f}%")
+        print(f"Temperature Suitability Factor: {temp_factor:.2f}")
+        print(f"Cloud Cover Percentage: {cloud_percentage:.2f}%")
+        if(score>100):
+            score=100
+        
+
+        print(f"Predicted Habitability Score: {score:.2f}")
+        
     return jsonify({'habitability_score': score})
 
 
