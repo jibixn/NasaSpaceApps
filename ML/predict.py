@@ -16,35 +16,21 @@ CORS(app)
 
 @app.route('/receiveData', methods=['POST'])
 def receive_data():
-    # data = request.json
-    # distance_from_sun = float(data['distance'])
-    # mass = float(data['mass'])
-    # radius = float(data['radius'])
-    # orbital_period = float(data['orbitalPeriod'])
-    # stellar_mass = float(data['stellarMass'])
-    # stellar_radius = float(data['stellarRadius'])
-    # temperature = float(data['temp'])
-    # Etemperature = float(data['ETemp'])
-    # system_age = float(data['systemAge'])
-    # atmospheric_thickness = float(data['atmosphericthickness'])
-    # magnetic_field = int(data['magneticfield'])
-    # oxygen_percentage = float(data['oxygen'])
-    # co2_percentage = float(data['carbon'])
-    # nitrogen_percentage = float(data['nitrogen'])
-    distance_from_sun = float(input("Enter the distance from the sun (in AU): "))
-    mass = float(input("Enter the mass (relative to Earth's mass): "))
-    radius = float(input("Enter the radius (relative to Earth's radius): "))
-    orbital_period = float(input("Enter the orbital period (in days): "))
-    stellar_mass = float(input("stellar mass "))
-    stellar_radius = float(input("stellar radius "))
-    temperature = float(input("stellar temp "))
-    system_age = float(input("age"))
-    Etemperature = float(input("surface temp "))
-    atmospheric_thickness = float(input("Enter the atmospheric thickness (in % relative to Earth): "))
-    magnetic_field = int(input("Is there a magnetic field? (1 for Yes, 0 for No): "))
-    oxygen_percentage = float(input("Enter the oxygen percentage (in %): "))
-    co2_percentage = float(input("Enter the CO2 percentage (in %): "))
-    nitrogen_percentage = float(input("Enter the nitrogen percentage (in %): "))
+    data = request.json
+    distance_from_sun = float(data['distance'])
+    mass = float(data['mass'])
+    radius = float(data['radius'])
+    orbital_period = float(data['orbitalPeriod'])
+    stellar_mass = float(data['stellarMass'])
+    stellar_radius = float(data['stellarRadius'])
+    temperature = float(data['temp'])
+    Etemperature = float(data['ETemp'])
+    system_age = float(data['systemAge'])
+    atmospheric_thickness = float(data['atmosphericthickness'])
+    magnetic_field = int(data['magneticfield'])
+    oxygen_percentage = float(data['oxygen'])
+    co2_percentage = float(data['carbon'])
+    nitrogen_percentage = float(data['nitrogen'])
 
     user_factors = {
         'Distance From Sun (AU)': distance_from_sun,
@@ -69,16 +55,16 @@ def receive_data():
         vegetation_percentage = calculate_vegetation_percentage(water_body_percentage, oxygen_percentage, temp_factor, co2_percentage)
         score = predict_habitability(user_factors)
 
-        # if score >= 1:
-        #     score = 100
-        # else:
-        #     score *= 100
+        if score >= 1:
+            score = 100
+        else:
+            score *= 100
 
         print(f"Predicted Habitability Score: {score:.2f}")
         
-    # return jsonify({'habitability_score': score,
-    #                 'sea_level': water_body_percentage,
-    #                 'vegetation': vegetation_percentage})
+    return jsonify({'habitability_score': score,
+                    'sea_level': water_body_percentage,
+                    'vegetation': vegetation_percentage})
 
 def calculate_temperature_factor(temperature, co2_percentage, optimal_temp=288, temp_range=100, co2_optimal=0.04):
     co2_effect = 1 + (min(co2_percentage / 100, 0.5) - co2_optimal) * 0.05
@@ -147,6 +133,5 @@ def predict_habitability(new_factors):
         return None
 
 if __name__ == "__main__":
-    # port = int(os.environ.get("PORT", 5000))
-    # app.run(host='0.0.0.0', port=port)
-    receive_data()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
