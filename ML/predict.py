@@ -14,7 +14,7 @@ with open("scaler.pkl", "rb") as scaler_file:
 
 
 app = Flask(__name__)  # Corrected __name__
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}) 
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}},supports_credentials=True) 
 
 @app.route('/receiveData', methods=['POST'])
 def receive_data():
